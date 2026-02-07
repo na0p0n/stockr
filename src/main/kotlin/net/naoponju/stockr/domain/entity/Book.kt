@@ -15,6 +15,6 @@ data class Book(
     val thumbnailUrl: String?,
     val description: String?,
     val deletedAt: LocalDateTime?,
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-    val updatedAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime
 )
