@@ -9,6 +9,6 @@ data class User(
     val passwordHash: String,
     val roleId: Int,
     val isActive: Boolean,
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-    val updatedAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime
 )
