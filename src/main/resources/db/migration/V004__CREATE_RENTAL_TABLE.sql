@@ -6,4 +6,4 @@ CREATE TABLE rentals(
     due_date DATE NOT NULL,
     return_date DATE,
     status_id INTEGER NOT NULL REFERENCES rental_status(id) ON DELETE RESTRICT
-)
+);
