@@ -1,11 +1,11 @@
 CREATE TABLE user_role(
     id SERIAL PRIMARY KEY,
-    role VARCHAR(20)
+    role VARCHAR(20) NOT NULL UNIQUE
 )
 
 CREATE TABLE rental_status(
     id SERIAL PRIMARY KEY,
-    status VARCHAR(20)
+    status VARCHAR(20) NOT NULL UNIQUE
 )
 
 INSERT INTO user_role VALUES

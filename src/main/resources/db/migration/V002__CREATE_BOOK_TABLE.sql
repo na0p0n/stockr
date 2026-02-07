@@ -5,12 +5,12 @@ CREATE TABLE books (
     publisher VARCHAR(255),
     publish_date DATE,
     isbn VARCHAR(13) UNIQUE,
-    price INTEGER,
+    price NUMERIC(10, 2),
     thumbnail_url TEXT,
     description TEXT,
     deleted_at TIMESTAMP,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX idx_books_title ON books(title);
