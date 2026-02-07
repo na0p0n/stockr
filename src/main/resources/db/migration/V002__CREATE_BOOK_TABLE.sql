@@ -14,5 +14,6 @@ CREATE TABLE books (
 );
 
 CREATE INDEX idx_books_title ON books(title);
+CREATE INDEX idx_books_title_gin ON books USING gin (title gin_trgm_ops);
 CREATE INDEX idx_books_author ON books(author);
 CREATE INDEX idx_books_created_at_desc ON books(created_at DESC);

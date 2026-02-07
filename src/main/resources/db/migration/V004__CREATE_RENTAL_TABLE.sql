@@ -5,7 +5,9 @@ CREATE TABLE rentals(
     rental_date DATE NOT NULL,
     due_date DATE NOT NULL,
     return_date DATE,
-    status_id INTEGER NOT NULL REFERENCES rental_status(id) ON DELETE RESTRICT
+    status_id INTEGER NOT NULL REFERENCES rental_status(id) ON DELETE RESTRICT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX idx_rentals_user_id ON rentals(user_id);
