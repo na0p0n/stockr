@@ -7,3 +7,6 @@ CREATE TABLE rentals(
     return_date DATE,
     status_id INTEGER NOT NULL REFERENCES rental_status(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_rentals_user_id ON rentals(user_id);
+CREATE INDEX idx_rentals_book_id ON rentals(book_id);
