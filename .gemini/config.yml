@@ -1,0 +1,14 @@
+version: 1
+project:
+  name: "stockr"
+  description: "Kotlin + Spring Boot + MyBatis (Annotation-based) による蔵書管理、貸出システム"
+
+# 常に参照させるコンテキストファイル
+context:
+  - .gemini/context/architecture.md
+
+system_instructions:
+  - "Kotlinのコーディング規約（公式）およびプロジェクト独自のアーキテクチャ規約を厳守してください。"
+  - "MyBatisのMapperはインターフェースとして定義し、SQLはXMLではなくアノテーション（@Select, @Insert等）で記述してください。"
+  - "SQLの可読性を高めるため、Kotlinのトリプルクォート（\"\"\"）を活用してください。"
+  - "ドメイン駆動設計（DDD）の考え方を取り入れ、ビジネスロジックは domain/entity に集約してください。"
