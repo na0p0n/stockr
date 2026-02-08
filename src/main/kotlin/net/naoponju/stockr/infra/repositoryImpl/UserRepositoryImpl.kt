@@ -22,7 +22,7 @@ class UserRepositoryImpl(
     override fun update(user: User): User {
         val updatedCount = userMapper.updateUser(user)
         if (updatedCount == 0) {
-            throw RuntimeException("ID = ${user.id} のユーザー情報の更新に失敗しました。")
+            throw RuntimeException("ユーザー情報更新API: ID = ${user.id} のユーザー情報の更新に失敗しました。")
         }
         return user
     }
@@ -30,7 +30,7 @@ class UserRepositoryImpl(
     override fun delete(userId: Long) {
         val deletedCount = userMapper.deleteUser(userId)
         if (deletedCount == 0) {
-            throw RuntimeException("ID = $userId のユーザーの削除に失敗しました。")
+            throw RuntimeException("ユーザー削除API: ID = $userId のユーザーの削除に失敗しました。")
         }
     }
 }

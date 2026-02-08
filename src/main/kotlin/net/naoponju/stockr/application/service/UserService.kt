@@ -4,16 +4,18 @@ import net.naoponju.stockr.application.dto.UserRegistrationRequest
 import net.naoponju.stockr.application.dto.UserResponse
 import net.naoponju.stockr.domain.entity.User
 import net.naoponju.stockr.domain.repository.UserRepository
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
+@Service
 class UserService(
     private val userRepository: UserRepository
 ) {
     @Transactional(readOnly = true)
     fun getUserById(id: Long): User {
         return userRepository.findById(id)
-            ?: throw NoSuchElementException("ユーザー(ID: $id)が見つかりません。")
+            ?: throw NoSuchElementException("ユーザー情報取得API: ユーザー(ID: $id)が見つかりません。")
     }
 
     @Transactional
@@ -35,8 +37,8 @@ class UserService(
 
     @Transactional
     fun updateProfile(user: User): UserResponse {
-        userRepository.findById(user.id ?: throw IllegalArgumentException("IDが必要です。"))
-            ?: throw NoSuchElementException("更新対象のユーザーが存在しません。")
+        userRepository.findById(user.id ?: throw IllegalArgumentException("ユーザー情報更新API: IDが必要です。"))
+            ?: throw NoSuchElementException("ユーザー情報更新API: 更新対象のユーザーが存在しません。")
         val updatedUser = userRepository.update(user)
         return convertToResponse(updatedUser)
     }
