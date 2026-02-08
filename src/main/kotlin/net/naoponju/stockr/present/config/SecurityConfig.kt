@@ -1,7 +1,6 @@
-package net.naoponju.stockr.present.config
-
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.env.Environment // 追加
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -12,7 +11,7 @@ import org.springframework.security.config.annotation.web.invoke
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+class SecurityConfig(private val environment: Environment) { // コンストラクタにEnvironmentをインジェクション
 
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
@@ -35,10 +34,11 @@ class SecurityConfig {
                 permitAll()
             }
 
-            // APIを未認証状態でも通せるようにするためcsrfを設定
-            // リリース時は削除する
-            csrf {
-                ignoringRequestMatchers("/api/user")
+            // 開発環境でのみCSRF保護を無効化する
+            if (environment.activeProfiles.contains("dev")) {
+                csrf {
+                    ignoringRequestMatchers("/api/user")
+                }
             }
         }
 
