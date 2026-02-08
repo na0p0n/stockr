@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 interface BookRepository {
     fun findBookById(bookId: Long): Book?
-    fun insertBook(book: Book)
-    fun updateBook(book: Book)
+    fun insertBook(book: Book): Book
+    fun updateBook(book: Book): Book
     fun deleteBook(bookId: Long, deletedAt: LocalDateTime)
 }
