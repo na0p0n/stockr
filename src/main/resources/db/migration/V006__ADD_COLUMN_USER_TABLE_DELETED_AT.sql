@@ -1,0 +1,1 @@
+ALTER TABLE stockr_dev.users ADD COLUMN deleted_at TIMESTAMP;
