@@ -33,7 +33,7 @@ class UserController(
     fun createUser(@RequestBody user: UserRegistrationRequest): ResponseEntity<UserResponse> {
         logger.info("ApiCalled: ユーザー新規登録API: Start ")
 
-        val createdUser = userService.signUp(user)
+        val createdUser = userService.createUser(user)
 
         logger.info("ユーザー新規登録API: Success (ID: ${createdUser.id})")
         return ResponseEntity.ok(createdUser)

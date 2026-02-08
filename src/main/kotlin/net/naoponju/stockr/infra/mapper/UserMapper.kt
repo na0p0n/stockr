@@ -23,7 +23,7 @@ interface UserMapper {
         FROM stockr_dev.users
         WHERE id = #{userId} AND is_active = true;
     """)
-    fun findUserById(userId: Long): User?
+    fun selectById(userId: Long): User?
 
     @Insert("""
         INSERT INTO stockr_dev.users(
@@ -46,7 +46,7 @@ interface UserMapper {
         );
     """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    fun createUser(user: User)
+    fun insert(user: User)
 
     @Update("""
         UPDATE stockr_dev.users
@@ -60,7 +60,7 @@ interface UserMapper {
             updated_at = #{updatedAt}
         WHERE id = #{id};
     """)
-    fun updateUser(user: User): Int
+    fun update(user: User): Int
 
     @Update("""
         UPDATE stockr_dev.users SET
@@ -69,5 +69,5 @@ interface UserMapper {
           deleted_at = CURRENT_TIMESTAMP
         WHERE id = #{userId};
     """)
-    fun deleteUser(userId: Long): Int
+    fun delete(userId: Long): Int
 }

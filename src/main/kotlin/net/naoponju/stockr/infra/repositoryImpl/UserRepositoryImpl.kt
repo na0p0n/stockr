@@ -10,25 +10,25 @@ class UserRepositoryImpl(
     private val userMapper: UserMapper
 ): UserRepository {
     override fun findById(userId: Long): User? {
-        return userMapper.findUserById(userId)
+        return userMapper.selectById(userId)
     }
 
-    override fun create(user: User): User {
-        userMapper.createUser(user)
+    override fun add(user: User): User {
+        userMapper.insert(user)
 
         return user
     }
 
     override fun update(user: User): User {
-        val updatedCount = userMapper.updateUser(user)
+        val updatedCount = userMapper.update(user)
         if (updatedCount == 0) {
             throw RuntimeException("ユーザー情報更新API: ID = ${user.id} のユーザー情報の更新に失敗しました。")
         }
         return user
     }
 
-    override fun delete(userId: Long) {
-        val deletedCount = userMapper.deleteUser(userId)
+    override fun deleteById(userId: Long) {
+        val deletedCount = userMapper.delete(userId)
         if (deletedCount == 0) {
             throw RuntimeException("ユーザー削除API: ID = $userId のユーザーの削除に失敗しました。")
         }

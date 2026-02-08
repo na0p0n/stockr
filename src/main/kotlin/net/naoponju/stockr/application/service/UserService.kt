@@ -19,7 +19,7 @@ class UserService(
     }
 
     @Transactional
-    fun signUp(request: UserRegistrationRequest): UserResponse {
+    fun createUser(request: UserRegistrationRequest): UserResponse {
         val nowTime = LocalDateTime.now()
         val newUser = User(
             id = null,
@@ -31,7 +31,7 @@ class UserService(
             createdAt = nowTime,
             updatedAt = nowTime
         )
-        val createdUser = userRepository.create(newUser)
+        val createdUser = userRepository.add(newUser)
         return convertToResponse(createdUser)
     }
 
@@ -45,7 +45,7 @@ class UserService(
 
     @Transactional
     fun deleteUser(id: Long) {
-        userRepository.delete(id)
+        userRepository.deleteById(id)
     }
 
     fun convertToResponse(user: User): UserResponse {

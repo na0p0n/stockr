@@ -4,7 +4,7 @@ import net.naoponju.stockr.domain.entity.User
 
 interface UserRepository {
     fun findById(userId: Long): User?
-    fun create(user: User): User
+    fun add(user: User): User
     fun update(user: User): User
-    fun delete(userId: Long)
+    fun deleteById(userId: Long)
 }
