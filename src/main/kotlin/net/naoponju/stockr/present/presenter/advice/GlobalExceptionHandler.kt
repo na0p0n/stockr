@@ -18,7 +18,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception::class)
     fun handleGeneralError(e: Exception): ResponseEntity<String> {
-        logger.error("${e.message}")
+        logger.error("予期せぬエラーが発生しました。", e)
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("予期せぬエラーが発生しました。")
     }
 }
