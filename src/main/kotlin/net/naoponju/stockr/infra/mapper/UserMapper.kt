@@ -25,6 +25,12 @@ interface UserMapper {
     """)
     fun selectById(userId: Long): User?
 
+    @Select("""
+        SELECT * FROM stockr_dev.users
+        WHERE username = #{username} AND deleted_at IS NULL
+    """)
+    fun selectByUsername(username: String): User?
+
     @Insert("""
         INSERT INTO stockr_dev.users(
           username,
