@@ -4,13 +4,15 @@ import net.naoponju.stockr.application.dto.UserRegistrationRequest
 import net.naoponju.stockr.application.dto.UserResponse
 import net.naoponju.stockr.domain.entity.User
 import net.naoponju.stockr.domain.repository.UserRepository
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
 class UserService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
     @Transactional(readOnly = true)
     fun getUserById(id: Long): User {
@@ -25,7 +27,7 @@ class UserService(
             id = null,
             username = request.username,
             email = request.email,
-            passwordHash = "hashed_${request.password}",
+            passwordHash = passwordEncoder.encode(request.password),
             roleId = 1,
             isActive = true,
             createdAt = nowTime,

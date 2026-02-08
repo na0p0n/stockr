@@ -14,7 +14,7 @@ import org.springframework.security.config.annotation.web.invoke
 class SecurityConfig {
 
     @Bean
-    fun PasswordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
