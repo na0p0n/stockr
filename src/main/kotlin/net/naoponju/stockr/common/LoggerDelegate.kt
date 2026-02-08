@@ -7,6 +7,8 @@ import kotlin.reflect.KProperty
 
 object LoggerDelegate: ReadOnlyProperty<Any, Logger> {
     override fun getValue(thisRef: Any, property: KProperty<*>): Logger {
-        return LoggerFactory.getLogger(thisRef.javaClass)
+        val klass = thisRef.javaClass
+        val loggerClass = klass.enclosingClass?.takeIf { it.kotlin.isCompanion } ?: klass
+        return LoggerFactory.getLogger(loggerClass)
     }
 }
