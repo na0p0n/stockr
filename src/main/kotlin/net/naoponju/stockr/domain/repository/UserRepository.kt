@@ -6,5 +6,5 @@ interface UserRepository {
     fun findById(userId: Long): User?
     fun create(user: User): User
     fun update(user: User): User
-    fun delete(id: Long)
+    fun delete(userId: Long)
 }

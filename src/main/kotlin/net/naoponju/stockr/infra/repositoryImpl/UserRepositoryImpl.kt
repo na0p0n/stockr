@@ -27,7 +27,10 @@ class UserRepositoryImpl(
         return user
     }
 
-    override fun delete(id: Long) {
-        userMapper.deleteUser(id)
+    override fun delete(userId: Long) {
+        val deletedCount = userMapper.deleteUser(userId)
+        if (deletedCount == 0) {
+            throw RuntimeException("ID = $userId のユーザーの削除に失敗しました。")
+        }
     }
 }
