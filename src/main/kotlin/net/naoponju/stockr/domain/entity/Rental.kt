@@ -12,5 +12,5 @@ data class Rental(
     val returnDate: LocalDate?,
     val statusId: Int,
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime,
 )

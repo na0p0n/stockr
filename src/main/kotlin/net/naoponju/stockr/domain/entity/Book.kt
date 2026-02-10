@@ -16,5 +16,5 @@ data class Book(
     val description: String?,
     val deletedAt: LocalDateTime?,
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime,
 )
