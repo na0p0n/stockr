@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.invoke
 @Profile("dev")
 class SecurityConfigDev {
     @Bean
-    fun securityFilterChainProd(http: HttpSecurity): SecurityFilterChain {
+    fun securityFilterChainDev(http: HttpSecurity): SecurityFilterChain {
         http {
             csrf {
                 disable()
