@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.config.annotation.web.invoke
+import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 
 @Configuration
@@ -31,9 +31,13 @@ class SecurityConfigProd {
                 loginPage = "/login"
                 permitAll()
             }
+            logout {
+                logoutUrl = "/logout"
+                logoutSuccessUrl = "/login?logout"
+                permitAll()
+            }
             // ... その他の本番向け設定（フォームログイン、ログアウトなど）
         }
         return http.build()
     }
-    // 他のBean定義
 }
