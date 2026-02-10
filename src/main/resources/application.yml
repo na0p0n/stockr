@@ -17,6 +17,8 @@ spring:
     mode: HTML
   messages:
     basename: messages
+  profiles:
+    active: dev
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
