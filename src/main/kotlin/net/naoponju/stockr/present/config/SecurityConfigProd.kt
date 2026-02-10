@@ -19,13 +19,17 @@ class SecurityConfigProd {
     fun securityFilterChainProd(http: HttpSecurity): SecurityFilterChain {
         http {
             csrf { // 本番ではCSRFを有効にする
-                csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse()
+                csrfTokenRepository = CookieCsrfTokenRepository()
             }
             authorizeHttpRequests {
                 authorize("/login", permitAll)
                 authorize("/css/**", permitAll)
                 authorize(HttpMethod.POST, "/api/user", permitAll)
                 authorize(anyRequest, authenticated) // 認証済みユーザーのみ許可
+            }
+            formLogin {
+                loginPage = "/login"
+                permitAll()
             }
             // ... その他の本番向け設定（フォームログイン、ログアウトなど）
         }
