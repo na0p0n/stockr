@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 import net.naoponju.stockr.application.dto.UserRegistrationRequest
 import net.naoponju.stockr.application.dto.UserResponse
 import net.naoponju.stockr.domain.entity.User
+import net.naoponju.stockr.domain.entity.UserRole
 import net.naoponju.stockr.domain.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -30,6 +31,7 @@ class UserService(
                 email = request.email,
                 passwordHash = passwordEncoder.encode(request.password),
                 roleId = 1,
+                role = UserRole.fromId(1),
                 isActive = true,
                 createdAt = nowTime,
                 updatedAt = nowTime,

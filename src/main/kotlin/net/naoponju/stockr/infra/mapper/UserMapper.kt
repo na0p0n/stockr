@@ -12,15 +12,18 @@ interface UserMapper {
     @Select(
         """
         SELECT
-          id,
+          users.id,
           username,
           email,
           password_hash,
           role_id,
+          user_role.role
           is_active,
           created_at,
           updated_at
         FROM stockr_dev.users
+        JOIN stockr_dev.user_role
+        ON stockr_dev.users.role_id = stockr_dev.user_role.id
         WHERE id = #{userId} AND is_active = true;
     """,
     )
@@ -29,16 +32,19 @@ interface UserMapper {
     @Select(
         """
         SELECT
-          id,
+          users.id,
           username,
           email,
           password_hash,
           role_id,
+          user_role.role
           is_active,
           created_at,
           updated_at
         FROM stockr_dev.users
-        WHERE username = #{username} AND is_active = true
+        JOIN stockr_dev.user_role
+        ON stockr_dev.users.role_id = stockr_dev.user_role.id
+        WHERE username = #{username} AND is_active = true;
     """,
     )
     fun selectByUsername(username: String): User?

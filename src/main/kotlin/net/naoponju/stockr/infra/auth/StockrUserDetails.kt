@@ -9,7 +9,7 @@ class StockrUserDetails(
     private val user: User,
 ) : UserDetails {
     override fun getAuthorities(): Collection<GrantedAuthority> =
-        listOf(SimpleGrantedAuthority("ROLE_${user.roleId}"))
+        listOf(SimpleGrantedAuthority("ROLE_${user.role}"))
 
     override fun getPassword(): String = user.passwordHash
 

@@ -34,7 +34,6 @@ class SecurityConfigProd {
                 logoutSuccessUrl = "/login?logout"
                 permitAll()
             }
-            // ... その他の本番向け設定（フォームログイン、ログアウトなど）
         }
         return http.build()
     }
