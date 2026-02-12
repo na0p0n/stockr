@@ -1,5 +1,6 @@
 package net.naoponju.stockr.application.service
 
+import java.time.LocalDateTime
 import net.naoponju.stockr.application.dto.UserRegistrationRequest
 import net.naoponju.stockr.application.dto.UserResponse
 import net.naoponju.stockr.domain.entity.User
@@ -7,12 +8,11 @@ import net.naoponju.stockr.domain.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
 ) {
     @Transactional(readOnly = true)
     fun getUserById(id: Long): User {
@@ -23,16 +23,17 @@ class UserService(
     @Transactional
     fun createUser(request: UserRegistrationRequest): UserResponse {
         val nowTime = LocalDateTime.now()
-        val newUser = User(
-            id = null,
-            username = request.username,
-            email = request.email,
-            passwordHash = passwordEncoder.encode(request.password),
-            roleId = 1,
-            isActive = true,
-            createdAt = nowTime,
-            updatedAt = nowTime
-        )
+        val newUser =
+            User(
+                id = null,
+                username = request.username,
+                email = request.email,
+                passwordHash = passwordEncoder.encode(request.password),
+                roleId = 1,
+                isActive = true,
+                createdAt = nowTime,
+                updatedAt = nowTime,
+            )
         val createdUser = userRepository.add(newUser)
         return convertToResponse(createdUser)
     }
@@ -57,7 +58,7 @@ class UserService(
             email = user.email,
             roleId = user.roleId,
             isActive = user.isActive,
-            createdAt = user.createdAt
+            createdAt = user.createdAt,
         )
     }
 }

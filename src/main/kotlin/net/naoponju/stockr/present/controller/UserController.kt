@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/user")
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
 ) {
     @GetMapping("/{id}")
-    fun getUser(@PathVariable id: Long): ResponseEntity<User> {
+    fun getUser(
+        @PathVariable id: Long,
+    ): ResponseEntity<User> {
         logger.info("ApiCalled: ユーザー情報取得API: Start (検索対象ユーザーID: $id)")
         val user = userService.getUserById(id)
 
@@ -30,7 +32,9 @@ class UserController(
     }
 
     @PostMapping
-    fun createUser(@RequestBody user: UserRegistrationRequest): ResponseEntity<UserResponse> {
+    fun createUser(
+        @RequestBody user: UserRegistrationRequest,
+    ): ResponseEntity<UserResponse> {
         logger.info("ApiCalled: ユーザー新規登録API: Start ")
 
         val createdUser = userService.createUser(user)
@@ -40,7 +44,10 @@ class UserController(
     }
 
     @PutMapping("/{id}")
-    fun updateUser(@PathVariable id: Long, @RequestBody user: User): ResponseEntity<UserResponse> {
+    fun updateUser(
+        @PathVariable id: Long,
+        @RequestBody user: User,
+    ): ResponseEntity<UserResponse> {
         logger.info("ApiCalled: ユーザー情報更新API: Start (更新対象ユーザーID: $id)")
 
         val updatedUser = userService.updateProfile(user.copy(id = id))
@@ -50,17 +57,18 @@ class UserController(
     }
 
     @DeleteMapping("/{id}")
-    fun deleteUser(@PathVariable id: Long): ResponseEntity<Unit> {
+    fun deleteUser(
+        @PathVariable id: Long,
+    ): ResponseEntity<Unit> {
         logger.info("ApiCalled: ユーザー消去API: Start (消去対象ユーザーID: $id")
 
         userService.deleteUser(id)
 
-        logger.info("ユーザー消去API: Success (ID:${id})")
+        logger.info("ユーザー消去API: Success (ID:$id)")
         return ResponseEntity.noContent().build()
     }
 
     companion object {
         private val logger by LoggerDelegate
     }
-
 }

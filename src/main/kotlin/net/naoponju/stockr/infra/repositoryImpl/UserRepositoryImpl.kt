@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class UserRepositoryImpl(
-    private val userMapper: UserMapper
-): UserRepository {
+    private val userMapper: UserMapper,
+) : UserRepository {
     override fun findById(userId: Long): User? {
         return userMapper.selectById(userId)
     }

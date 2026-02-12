@@ -1,7 +1,6 @@
 package net.naoponju.stockr.infra.mapper
 
 import net.naoponju.stockr.domain.entity.User
-import org.apache.ibatis.annotations.Delete
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Options
@@ -10,7 +9,8 @@ import org.apache.ibatis.annotations.Update
 
 @Mapper
 interface UserMapper {
-    @Select("""
+    @Select(
+        """
         SELECT
           id,
           username,
@@ -22,10 +22,12 @@ interface UserMapper {
           updated_at
         FROM stockr_dev.users
         WHERE id = #{userId} AND is_active = true;
-    """)
+    """,
+    )
     fun selectById(userId: Long): User?
 
-    @Select("""
+    @Select(
+        """
         SELECT
           id,
           username,
@@ -37,10 +39,12 @@ interface UserMapper {
           updated_at
         FROM stockr_dev.users
         WHERE username = #{username} AND is_active = true
-    """)
+    """,
+    )
     fun selectByUsername(username: String): User?
 
-    @Insert("""
+    @Insert(
+        """
         INSERT INTO stockr_dev.users(
           username,
           email,
@@ -59,11 +63,13 @@ interface UserMapper {
           #{createdAt},
           #{updatedAt}
         );
-    """)
+    """,
+    )
     @Options(useGeneratedKeys = true, keyProperty = "id")
     fun insert(user: User)
 
-    @Update("""
+    @Update(
+        """
         UPDATE stockr_dev.users
           SET
             username = #{username},
@@ -74,15 +80,18 @@ interface UserMapper {
             created_at = #{createdAt},
             updated_at = #{updatedAt}
         WHERE id = #{id};
-    """)
+    """,
+    )
     fun update(user: User): Int
 
-    @Update("""
+    @Update(
+        """
         UPDATE stockr_dev.users SET
           is_active = false,
           updated_at = CURRENT_TIMESTAMP,
           deleted_at = CURRENT_TIMESTAMP
         WHERE id = #{userId};
-    """)
+    """,
+    )
     fun delete(userId: Long): Int
 }

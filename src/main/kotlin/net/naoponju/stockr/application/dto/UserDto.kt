@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 data class UserRegistrationRequest(
     val username: String,
     val email: String,
-    val password: String
+    val password: String,
 )
 
 data class UserResponse(
@@ -14,5 +14,5 @@ data class UserResponse(
     val email: String,
     val roleId: Int,
     val isActive: Boolean,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
 )
