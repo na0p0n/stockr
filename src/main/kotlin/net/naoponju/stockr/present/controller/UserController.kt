@@ -61,7 +61,7 @@ class UserController(
     fun deleteUser(
         @PathVariable id: Long,
     ): ResponseEntity<Unit> {
-        logger.info("ApiCalled: ユーザー消去API: Start (消去対象ユーザーID: $id")
+        logger.info("ApiCalled: ユーザー消去API: Start (消去対象ユーザーID: $id)")
 
         userService.deleteUser(id)
 
