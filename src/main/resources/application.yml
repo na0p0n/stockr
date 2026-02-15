@@ -2,7 +2,7 @@ spring:
   application:
     name: stockr
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/stockr}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/stockr?currentSchema=stockr_dev}
     username: ${SPRING_DATASOURCE_USERNAME:stockr}
     password: ${SPRING_DATASOURCE_PASSWORD:secret}
     driver-class-name: org.postgresql.Driver
@@ -17,6 +17,8 @@ spring:
     mode: HTML
   messages:
     basename: messages
+  profiles:
+    active: dev
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:

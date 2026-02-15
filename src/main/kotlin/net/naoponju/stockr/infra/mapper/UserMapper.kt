@@ -1,31 +1,57 @@
 package net.naoponju.stockr.infra.mapper
 
 import net.naoponju.stockr.domain.entity.User
-import org.apache.ibatis.annotations.Delete
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Options
 import org.apache.ibatis.annotations.Select
 import org.apache.ibatis.annotations.Update
+import java.time.LocalDateTime
 
 @Mapper
 interface UserMapper {
-    @Select("""
+    @Select(
+        """
         SELECT
-          id,
+          users.id,
           username,
           email,
           password_hash,
           role_id,
+          user_role.role,
           is_active,
           created_at,
           updated_at
         FROM stockr_dev.users
+        JOIN stockr_dev.user_role
+        ON stockr_dev.users.role_id = stockr_dev.user_role.id
         WHERE id = #{userId} AND is_active = true;
-    """)
+    """,
+    )
     fun selectById(userId: Long): User?
 
-    @Insert("""
+    @Select(
+        """
+        SELECT
+          users.id,
+          username,
+          email,
+          password_hash,
+          role_id,
+          user_role.role,
+          is_active,
+          created_at,
+          updated_at
+        FROM stockr_dev.users
+        JOIN stockr_dev.user_role
+        ON stockr_dev.users.role_id = stockr_dev.user_role.id
+        WHERE username = #{username} AND is_active = true;
+    """,
+    )
+    fun selectByUsername(username: String): User?
+
+    @Insert(
+        """
         INSERT INTO stockr_dev.users(
           username,
           email,
@@ -44,11 +70,13 @@ interface UserMapper {
           #{createdAt},
           #{updatedAt}
         );
-    """)
+    """,
+    )
     @Options(useGeneratedKeys = true, keyProperty = "id")
     fun insert(user: User)
 
-    @Update("""
+    @Update(
+        """
         UPDATE stockr_dev.users
           SET
             username = #{username},
@@ -59,15 +87,18 @@ interface UserMapper {
             created_at = #{createdAt},
             updated_at = #{updatedAt}
         WHERE id = #{id};
-    """)
+    """,
+    )
     fun update(user: User): Int
 
-    @Update("""
+    @Update(
+        """
         UPDATE stockr_dev.users SET
           is_active = false,
-          updated_at = CURRENT_TIMESTAMP,
-          deleted_at = CURRENT_TIMESTAMP
+          updated_at = #{updatedAt},
+          deleted_at = #{deletedAt}
         WHERE id = #{userId};
-    """)
-    fun delete(userId: Long): Int
+    """,
+    )
+    fun delete(userId: Long, updatedAt: LocalDateTime, deletedAt: LocalDateTime): Int
 }

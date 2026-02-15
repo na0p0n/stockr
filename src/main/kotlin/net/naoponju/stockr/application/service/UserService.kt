@@ -1,16 +1,23 @@
 package net.naoponju.stockr.application.service
 
+import java.time.LocalDateTime
 import net.naoponju.stockr.application.dto.UserRegistrationRequest
 import net.naoponju.stockr.application.dto.UserResponse
+import net.naoponju.stockr.application.dto.UserUpdateRequest
 import net.naoponju.stockr.domain.entity.User
+import net.naoponju.stockr.domain.entity.UserRole
 import net.naoponju.stockr.domain.repository.UserRepository
+import net.naoponju.stockr.infra.auth.StockrUserDetails
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @Service
 class UserService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder,
 ) {
     @Transactional(readOnly = true)
     fun getUserById(id: Long): User {
@@ -21,31 +28,42 @@ class UserService(
     @Transactional
     fun createUser(request: UserRegistrationRequest): UserResponse {
         val nowTime = LocalDateTime.now()
-        val newUser = User(
-            id = null,
-            username = request.username,
-            email = request.email,
-            passwordHash = "hashed_${request.password}",
-            roleId = 1,
-            isActive = true,
-            createdAt = nowTime,
-            updatedAt = nowTime
-        )
+        val newUser =
+            User(
+                id = null,
+                username = request.username,
+                email = request.email,
+                passwordHash = passwordEncoder.encode(request.password),
+                roleId = UserRole.USER.id,
+                role = UserRole.USER,
+                isActive = true,
+                createdAt = nowTime,
+                updatedAt = nowTime,
+            )
         val createdUser = userRepository.add(newUser)
         return convertToResponse(createdUser)
     }
 
     @Transactional
-    fun updateProfile(user: User): UserResponse {
-        userRepository.findById(user.id ?: throw IllegalArgumentException("ユーザー情報更新API: IDが必要です。"))
+    fun updateProfile(id: Long, userRequest: UserUpdateRequest): UserResponse {
+        val currentUser = userRepository.findById(id)
             ?: throw NoSuchElementException("ユーザー情報更新API: 更新対象のユーザーが存在しません。")
-        val updatedUser = userRepository.update(user)
-        return convertToResponse(updatedUser)
+        verifyUserId(id)
+        val updatedUser = currentUser.copy(
+            username = userRequest.username ?: currentUser.username,
+            email = userRequest.email ?: currentUser.email,
+            passwordHash = userRequest.password?.let { passwordEncoder.encode(it) } ?: currentUser.passwordHash,
+            updatedAt = LocalDateTime.now()
+        )
+
+        val savedUser = userRepository.update(updatedUser)
+        return convertToResponse(savedUser)
     }
 
     @Transactional
     fun deleteUser(id: Long) {
-        userRepository.deleteById(id)
+        verifyUserId(id)
+        userRepository.deleteById(id, LocalDateTime.now(), LocalDateTime.now())
     }
 
     fun convertToResponse(user: User): UserResponse {
@@ -55,7 +73,18 @@ class UserService(
             email = user.email,
             roleId = user.roleId,
             isActive = user.isActive,
-            createdAt = user.createdAt
+            createdAt = user.createdAt,
         )
+    }
+
+    fun verifyUserId( id: Long ) {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val currentUser = authentication.principal as StockrUserDetails
+        val currentUserId = currentUser.user.id
+        val currentUserRole = currentUser.user.role
+
+        if (currentUserId != id && currentUserRole ==  UserRole.USER) {
+            throw AccessDeniedException("他のユーザーにアクセスする権限がありません。")
+        }
     }
 }

@@ -11,8 +11,8 @@ CREATE TABLE stockr_dev.rental_status(
 );
 
 INSERT INTO stockr_dev.user_role(id, role) VALUES
-    (1, 'ADMIN'),
-    (2, 'USER'),
+    (1, 'USER'),
+    (2, 'ADMIN'),
     (3, 'STAFF');
 
 INSERT INTO stockr_dev.rental_status(id, status) VALUES

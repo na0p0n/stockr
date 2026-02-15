@@ -4,11 +4,12 @@ import net.naoponju.stockr.domain.entity.User
 import net.naoponju.stockr.domain.repository.UserRepository
 import net.naoponju.stockr.infra.mapper.UserMapper
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 class UserRepositoryImpl(
-    private val userMapper: UserMapper
-): UserRepository {
+    private val userMapper: UserMapper,
+) : UserRepository {
     override fun findById(userId: Long): User? {
         return userMapper.selectById(userId)
     }
@@ -27,8 +28,8 @@ class UserRepositoryImpl(
         return user
     }
 
-    override fun deleteById(userId: Long) {
-        val deletedCount = userMapper.delete(userId)
+    override fun deleteById(userId: Long, updatedAt: LocalDateTime, deletedAt: LocalDateTime) {
+        val deletedCount = userMapper.delete(userId, updatedAt, deletedAt)
         if (deletedCount == 0) {
             throw RuntimeException("ユーザー削除API: ID = $userId のユーザーの削除に失敗しました。")
         }
