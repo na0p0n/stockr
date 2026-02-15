@@ -3,9 +3,13 @@ package net.naoponju.stockr.application.service
 import java.time.LocalDateTime
 import net.naoponju.stockr.application.dto.UserRegistrationRequest
 import net.naoponju.stockr.application.dto.UserResponse
+import net.naoponju.stockr.application.dto.UserUpdateRequest
 import net.naoponju.stockr.domain.entity.User
 import net.naoponju.stockr.domain.entity.UserRole
 import net.naoponju.stockr.domain.repository.UserRepository
+import net.naoponju.stockr.infra.auth.StockrUserDetails
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -30,8 +34,8 @@ class UserService(
                 username = request.username,
                 email = request.email,
                 passwordHash = passwordEncoder.encode(request.password),
-                roleId = 1,
-                role = UserRole.fromId(1),
+                roleId = UserRole.USER.id,
+                role = UserRole.USER,
                 isActive = true,
                 createdAt = nowTime,
                 updatedAt = nowTime,
@@ -41,11 +45,17 @@ class UserService(
     }
 
     @Transactional
-    fun updateProfile(user: User): UserResponse {
-        userRepository.findById(user.id ?: throw IllegalArgumentException("ユーザー情報更新API: IDが必要です。"))
+    fun updateProfile(id: Long, userRequest: UserUpdateRequest): UserResponse {
+        val currentUser = userRepository.findById(id)
             ?: throw NoSuchElementException("ユーザー情報更新API: 更新対象のユーザーが存在しません。")
-        val updatedUser = userRepository.update(user)
-        return convertToResponse(updatedUser)
+        val updatedUser = currentUser.copy(
+            username = userRequest.username ?: currentUser.username,
+            email = userRequest.email ?: currentUser.email,
+            passwordHash = userRequest.password?.let { passwordEncoder.encode(userRequest.password) } ?: currentUser.passwordHash
+        )
+
+        val savedUser = userRepository.update(updatedUser)
+        return convertToResponse(savedUser)
     }
 
     @Transactional
@@ -62,5 +72,16 @@ class UserService(
             isActive = user.isActive,
             createdAt = user.createdAt,
         )
+    }
+
+    fun userVerification(id: Long) {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val currentUser = authentication.principal as StockrUserDetails
+        val currentUserId = currentUser.user.id
+        val currentUserRole = currentUser.user.role
+
+        if (currentUserId != id && currentUserRole != UserRole.ADMIN) {
+            throw AccessDeniedException("このユーザーの情報にアクセスする権限がありません。")
+        }
     }
 }

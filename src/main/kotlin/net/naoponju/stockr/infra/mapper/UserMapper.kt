@@ -17,7 +17,7 @@ interface UserMapper {
           email,
           password_hash,
           role_id,
-          user_role.role
+          user_role.role,
           is_active,
           created_at,
           updated_at
@@ -37,7 +37,7 @@ interface UserMapper {
           email,
           password_hash,
           role_id,
-          user_role.role
+          user_role.role,
           is_active,
           created_at,
           updated_at

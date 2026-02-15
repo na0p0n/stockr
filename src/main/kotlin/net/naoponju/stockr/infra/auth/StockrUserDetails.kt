@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class StockrUserDetails(
-    private val user: User,
+    val user: User,
 ) : UserDetails {
     override fun getAuthorities(): Collection<GrantedAuthority> =
         listOf(SimpleGrantedAuthority("ROLE_${user.role}"))

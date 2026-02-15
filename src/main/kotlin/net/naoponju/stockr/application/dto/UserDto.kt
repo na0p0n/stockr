@@ -16,3 +16,9 @@ data class UserResponse(
     val isActive: Boolean,
     val createdAt: LocalDateTime,
 )
+
+data class UserUpdateRequest(
+    val username: String?,
+    val email: String?,
+    val password: String?,
+)
