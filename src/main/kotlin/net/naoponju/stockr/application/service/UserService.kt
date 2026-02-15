@@ -7,6 +7,9 @@ import net.naoponju.stockr.application.dto.UserUpdateRequest
 import net.naoponju.stockr.domain.entity.User
 import net.naoponju.stockr.domain.entity.UserRole
 import net.naoponju.stockr.domain.repository.UserRepository
+import net.naoponju.stockr.infra.auth.StockrUserDetails
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -45,6 +48,7 @@ class UserService(
     fun updateProfile(id: Long, userRequest: UserUpdateRequest): UserResponse {
         val currentUser = userRepository.findById(id)
             ?: throw NoSuchElementException("ユーザー情報更新API: 更新対象のユーザーが存在しません。")
+        verifyUserId(id)
         val updatedUser = currentUser.copy(
             username = userRequest.username ?: currentUser.username,
             email = userRequest.email ?: currentUser.email,
@@ -58,6 +62,7 @@ class UserService(
 
     @Transactional
     fun deleteUser(id: Long) {
+        verifyUserId(id)
         userRepository.deleteById(id, LocalDateTime.now(), LocalDateTime.now())
     }
 
@@ -70,5 +75,16 @@ class UserService(
             isActive = user.isActive,
             createdAt = user.createdAt,
         )
+    }
+
+    fun verifyUserId( id: Long ) {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val currentUser = authentication.principal as StockrUserDetails
+        val currentUserId = currentUser.user.id
+        val currentUserRole = currentUser.user.role
+
+        if (currentUserId != id && currentUserRole ==  UserRole.USER) {
+            throw AccessDeniedException("他のユーザーにアクセスする権限がありません。")
+        }
     }
 }
