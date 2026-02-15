@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Options
 import org.apache.ibatis.annotations.Select
 import org.apache.ibatis.annotations.Update
+import java.time.LocalDateTime
 
 @Mapper
 interface UserMapper {
@@ -94,10 +95,10 @@ interface UserMapper {
         """
         UPDATE stockr_dev.users SET
           is_active = false,
-          updated_at = CURRENT_TIMESTAMP,
-          deleted_at = CURRENT_TIMESTAMP
+          updated_at = #{updatedAt},
+          deleted_at = #{deletedAt}
         WHERE id = #{userId};
     """,
     )
-    fun delete(userId: Long): Int
+    fun delete(userId: Long, updatedAt: LocalDateTime, deletedAt: LocalDateTime): Int
 }

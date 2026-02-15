@@ -7,9 +7,6 @@ import net.naoponju.stockr.application.dto.UserUpdateRequest
 import net.naoponju.stockr.domain.entity.User
 import net.naoponju.stockr.domain.entity.UserRole
 import net.naoponju.stockr.domain.repository.UserRepository
-import net.naoponju.stockr.infra.auth.StockrUserDetails
-import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -61,7 +58,7 @@ class UserService(
 
     @Transactional
     fun deleteUser(id: Long) {
-        userRepository.deleteById(id)
+        userRepository.deleteById(id, LocalDateTime.now(), LocalDateTime.now())
     }
 
     fun convertToResponse(user: User): UserResponse {
@@ -73,16 +70,5 @@ class UserService(
             isActive = user.isActive,
             createdAt = user.createdAt,
         )
-    }
-
-    fun userVerification(id: Long) {
-        val authentication = SecurityContextHolder.getContext().authentication
-        val currentUser = authentication.principal as StockrUserDetails
-        val currentUserId = currentUser.user.id
-        val currentUserRole = currentUser.user.role
-
-        if (currentUserId != id && currentUserRole != UserRole.ADMIN) {
-            throw AccessDeniedException("このユーザーの情報にアクセスする権限がありません。")
-        }
     }
 }
