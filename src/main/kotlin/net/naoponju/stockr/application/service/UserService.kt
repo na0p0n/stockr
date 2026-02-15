@@ -51,7 +51,8 @@ class UserService(
         val updatedUser = currentUser.copy(
             username = userRequest.username ?: currentUser.username,
             email = userRequest.email ?: currentUser.email,
-            passwordHash = userRequest.password?.let { passwordEncoder.encode(userRequest.password) } ?: currentUser.passwordHash
+            passwordHash = userRequest.password?.let { passwordEncoder.encode(it) } ?: currentUser.passwordHash,
+            updatedAt = LocalDateTime.now()
         )
 
         val savedUser = userRepository.update(updatedUser)
